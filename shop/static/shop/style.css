@@ -87,3 +87,17 @@ body {
 .footer-custom .page-item a:hover {
     color: #e56600; /* Text color on hover */
 }
+
+/* POPOVER */
+
+ .popover {
+    background-color: #222831; /* Dark background */
+    color: #EEEEEE; /* Light text color */
+  }
+  .popover-header {
+    background-color: #FD7014; /* Slightly lighter background for the header */
+    color: #EEEEEE; /* Light text color */
+  }
+  .popover-body {
+    color: #EEEEEE; /* Light text color */
+  }

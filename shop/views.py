@@ -4,8 +4,9 @@ from django.core.paginator import Paginator
 # Create your views here.
 
 def index(request):
-    product_objects = Product.objects.all()
-
+    # product_objects = Product.objects.all()
+    product_objects = Product.objects.all().order_by('id')
+    
     search_placeholder = "Search products..."
     product_name = request.GET.get('product_name')
     if product_name != "" and product_name is not None:
