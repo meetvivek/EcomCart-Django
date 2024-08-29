@@ -1,3 +1,138 @@
-{% for product in product_objects %}
-    <h2>{{ product.title }}</h2>
-{% endfor %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcomCart</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    
+    <link rel="stylesheet", href="{% static 'shop/style.css' %}">    
+</head>
+<body>
+    
+    <!-- Navbar -->
+
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand custom-color"  href="#">EcomCart</a>
+            <button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link custom-color" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link custom-color" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link custom-color" href="#">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="cart" class="nav-link custom-color" href="#">Cart(0)</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    {% block body %}
+    <!-- Search Bar and Categories -->
+    <div class="container mt-4">
+        <div class="row">
+            <form class="col-md-8 d-flex " action="" method="GET">
+                <input type="search" class="form-control search-card" placeholder="Search products..." name="product_name" value="{{ product_name|default_if_none:'' }}">
+                <button class="btn btn-warning ms-2" type="submit" >Search</button>
+            </form>
+            <div class="col-md-4">
+                <div class="btn-group w-100" role="group" aria-label="Categories">
+                    <button type="button" class="btn btn-outline-warning">All products</button>
+                    <button type="button" class="btn btn-outline-warning">Electronic</button>
+                    <button type="button" class="btn btn-outline-warning">Fashion</button>
+                    <button type="button" class="btn btn-outline-warning">Sports</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Listing -->
+    <div class="container mt-5">
+        <div class="row">
+            {% for product in product_objects %}
+            <div class="col-md-4 mb-5">
+                <div class="card product-card h-100">
+                    <img src="{{ product.image }}" class="card-img-top" alt="{{ product.title }}">
+                    <div class="card-body d-flex flex-column">
+                        <a href="{{ product.id }}" class="">
+                            <h5 class="card-title">{{ product.title }}</h5>
+                        </a>
+                        <div class="price-container mt-auto">
+                            <p class="card-text">
+                                <span class="text-muted text-decoration-line-through">&#8377;{{ product.price }}</span>
+                                <span class="text-success">&#8377;{{ product.discount_price }}</span>
+                            </p>
+                            <a id="{{ product.id }}" class="btn atc btn-warning">Add to Cart</a>
+                            <a  class="btn btn-dark">Buy Now</a> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Footer Section for Pagination -->
+
+    <footer class="container mt-4 footer-custom">
+        <div class="row">
+            <div class="col text-center">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% if product_objects.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ product_objects.previous_page_number }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        {% for num in product_objects.paginator.page_range %}
+                            {% if product_objects.number == num %}
+                                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                            {% elif num > product_objects.number|add:'-3' and num < product_objects.number|add:'3' %}
+                                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if product_objects.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ product_objects.next_page_number }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+
+    {% endblock %}
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+
+</html>
+
+
+

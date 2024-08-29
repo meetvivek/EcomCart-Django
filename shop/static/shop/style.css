@@ -1,0 +1,89 @@
+.navbar-custom {
+    background-color: #222831; /* Custom color for the navbar */
+}
+.product-card {
+    margin-bottom: 30px;
+    height: 100%; /* Ensure cards take up full height */
+    display: flex;
+    flex-direction: column;
+}
+.product-card img {
+    height: 200px;
+    object-fit: cover;
+}
+.card-body {
+    flex-grow: 1; /* Makes the body take up remaining space */
+}
+.card-title {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+.card-text {
+    margin-bottom: 10px;
+}
+.price-container {
+    margin-top: auto; /* Push the price and button to the bottom */
+}
+
+body {
+    background-color: #EEEEEE;
+}
+
+.custom-color {
+    color: #EEEEEE;
+}
+
+.custom-color:hover {
+    color: #FD7014;
+}
+
+.btn-warning {
+    background-color: #FD7014;
+    border-color: #FD7014;
+}
+
+.btn-warning:hover {
+    background-color: #e56600; /* Slightly darker shade for hover effect */
+    border-color: #e56600;
+}
+
+.btn-outline-warning {
+    color: #FD7014;
+    border-color: #FD7014;
+}
+
+.btn-outline-warning:hover {
+    background-color: #393E46;
+    color: #EEEEEE;
+    border-color: #393E46;
+}
+
+.product-card {
+    background-color: #fff; /* Ensure the card background is white for contrast */
+    border: 1px solid #ddd; /* Subtle border */
+    border-radius: 8px; /* Rounded corners for a softer look */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3); /* Deep shadow for a 3D effect */
+    transition: box-shadow 0.3s ease-in-out; /* Smooth transition if needed */
+}
+
+.search-card {  
+    background-color: #fff; /* Ensure the card background is white for contrast */
+    border: 1px solid #ddd; /* Subtle border */
+    border-radius: 8px; /* Rounded corners for a softer look */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3); /* Deep shadow for a 3D effect */
+    transition: box-shadow 0.3s ease-in-out; /* Smooth transition if needed */
+    
+}
+
+.footer-custom .page-link {
+    color: #FD7014; /* Text color for pagination links */
+}
+
+.footer-custom .page-item.active .page-link {
+    background-color: #FD7014; /* Background color for active page number */
+    color: #fff; /* Text color for active page number */
+}
+
+.footer-custom .page-item a:hover {
+    color: #e56600; /* Text color on hover */
+}
