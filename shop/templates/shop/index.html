@@ -31,12 +31,12 @@
                     <li class="nav-item">
                         <a class="nav-link custom-color" href="{{ "/" }}">Home</a>
                     </li>
-                    <li class="nav-item">
+                    {% comment %} <li class="nav-item">
                         <a class="nav-link custom-color" href="#">About</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link custom-color" href="#">Contact</a>
-                    </li>
+                    </li> {% endcomment %}
                     <li class="nav-item">
                         <a tabindex="0" id="cart" role="button" data-bs-trigger="focus" data-bs-html="true" type="button" class="btn btn-dark" data-bs-toggle="popover" title="Your Cart" data-bs-content="Your Bag Is Empty. Start Filling It Up!">
                             <img width="28" height="28" src="https://img.icons8.com/glyph-neue/64/FD7E14/shopping-cart.png" alt="shopping-cart"/> 
@@ -82,7 +82,7 @@
                         <div class="price-container mt-auto">
                             <p class="card-text">
                                 <span class="text-muted text-decoration-line-through">&#8377;{{ product.price }}</span>
-                                <span class="text-success">&#8377;{{ product.discount_price }}</span>
+                                <span id="price{{ product.id }}" class="text-success">{{ product.discount_price }}</span>
                             </p>
                             
                             <a id="{{ product.id }}" class="btn atc btn-warning">Add to Cart</a>
@@ -170,7 +170,7 @@
             for (var x in cart) {
                 var itemTitle = cart[x][1];
                 
-                cartString += "<li>" + itemTitle + " - <br><em style='color:orange;'> Qty: </em> " + cart[x][0] + "</li>";
+                cartString += "<li>" + itemTitle + " - <em style='color:orange;'> Qty: </em> " + cart[x][0] + "</li>";
             }
             cartString += "</ol>";
         }
@@ -201,11 +201,13 @@
         if(cart[item_id] != undefined){
             quantity = cart[item_id][0] + 1
             cart[item_id][0] = quantity;
+            cart[item_id][2] += parseFloat(document.getElementById("price" + item_id).innerHTML);
 
         } else {
             quantity = 1;
+            price = parseFloat(document.getElementById("price" + item_id).innerHTML);
             name = document.getElementById("title" + item_id).innerHTML; 
-            cart[item_id] = [quantity, name];
+            cart[item_id] = [quantity, name, price];
         }
         localStorage.setItem('cart', JSON.stringify(cart));
         updateCart(); // Update cart count and popover content

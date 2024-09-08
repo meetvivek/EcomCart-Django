@@ -101,3 +101,20 @@ body {
   .popover-body {
     color: #EEEEEE; /* Light text color */
   }
+
+  .title-style {
+    background-color: #fd7014;
+    color: black;
+    padding: 5px;
+    /* border-radius: 5px; */
+    text-align: center; /* Optional, to center the text */
+}
+
+.custom-label {
+    white-space: nowrap;
+    margin-right: 2px; /* Prevents the label text from wrapping */
+}
+
+.custom-input {
+    flex-grow: 1; /* Allows the input to take up remaining space */
+}
