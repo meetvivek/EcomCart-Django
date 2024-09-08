@@ -170,13 +170,13 @@
             for (var x in cart) {
                 var itemTitle = cart[x][1];
                 
-                cartString += "<li>" + itemTitle + " - <em style='color:orange;'> Qty: </em> " + cart[x][0] + "</li>";
+                cartString += "<li>" + itemTitle + " - <br><em style='color:orange;'> Qty: </em> " + cart[x][0] + "</li>";
             }
             cartString += "</ol>";
         }
 
         // Adding a checkout button
-        cartString += "<a href='/checkout'><button class='btn btn-warning btn-sm mt-2' id='checkout'>Checkout</button></a> ";
+        cartString += "<a href='/checkout' class='btn btn-warning btn-sm mt-2' id='checkout'>Checkout</a> ";
 
         // Update popover content
         var cartPopoverElement = document.getElementById("cart");
@@ -213,7 +213,6 @@
 
     // Initial cart update
     updateCart();
-
 </script>
 </html>
 
