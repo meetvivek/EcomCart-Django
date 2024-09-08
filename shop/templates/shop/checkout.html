@@ -66,7 +66,7 @@
                         </div>
 
                         <div class="col-md-6 d-flex justify-content-end">
-                            <button type="submit" class="btn btn-warning w-100">Place Order</button>
+                            <button id="orderplaced" type="submit" class="btn btn-warning w-100">Place Order</button>
                         </div>
                     </div>
                     
@@ -102,6 +102,13 @@
     
 
     $('#items').val(JSON.stringify(cart)); 
+
+    // Event listener for the "orderplaced" button
+    $('#orderplaced').on('click', function() {
+        localStorage.removeItem('cart'); // Clears the cart from localStorage
+        alert('Order placed Successfully!'); // Optional: Alert user that the cart was cleared
+        location.reload(); // Optional: Reload the page if needed
+    });
 </script>
 
 {% endblock %}
