@@ -22,7 +22,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container-fluid">
-            <a class="navbar-brand custom-color"  href="{{ "/" }}">EcomCart</a>
+            <a class="navbar-brand custom-color"  href="{{ "/" }}">&#x1F5D1; EcomCart</a>
             <button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -34,10 +34,6 @@
                     <li class="nav-item">
                         <a class="nav-link custom-color" href="/about">About</a>
                     </li>
-                    {% comment %} 
-                    <li class="nav-item">
-                        <a class="nav-link custom-color" href="#">Contact</a>
-                    </li> {% endcomment %}
                     <li class="nav-item">
                         <a tabindex="0" id="cart" role="button" data-bs-trigger="focus" data-bs-html="true" type="button" class="btn btn-dark" data-bs-toggle="popover" title="Your Cart" data-bs-content="Your Bag Is Empty. Start Filling It Up!">
                             <img width="28" height="28" src="https://img.icons8.com/glyph-neue/64/FD7E14/shopping-cart.png" alt="shopping-cart"/> 
@@ -58,14 +54,14 @@
                 <input type="search" class="form-control search-card" placeholder="Search products..." name="product_name" value="{{ product_name|default_if_none:'' }}">
                 <button class="btn btn-warning ms-2" type="submit" >Search</button>
             </form>
-            <div class="col-md-4">
+            {% comment %} <div class="col-md-4">
                 <div class="btn-group w-100" role="group" aria-label="Categories">
-                    <button type="button" class="btn btn-outline-warning">All products</button>
-                    <button type="button" class="btn btn-outline-warning">Electronic</button>
+                    <a href="/" class="btn btn-outline-warning">All products</a>
+                    <button type="button"class="btn btn-outline-warning">Electronic</button>
                     <button type="button" class="btn btn-outline-warning">Fashion</button>
                     <button type="button" class="btn btn-outline-warning">Sports</button>
                 </div>
-            </div>
+            </div> {% endcomment %}
         </div>
     </div>
 
@@ -77,8 +73,8 @@
                 <div class="card product-card h-100">
                     <img src="{{ product.image }}" class="card-img-top" alt="{{ product.title }}">
                     <div class="card-body d-flex flex-column">
-                        <a href="{{ product.id }}" class="">
-                            <h5 id="title{{ product.id }}" class="card-title">{{ product.title }}</h5>
+                        <a href="{{ product.id }}" class="text-decoration-none text-dark">
+                            <h5 id="title{{ product.id }}" class="card-title ">{{ product.title }}</h5>
                         </a>
                         <div class="price-container mt-auto">
                             <p class="card-text">
@@ -87,7 +83,8 @@
                             </p>
                             
                             <a id="{{ product.id }}" class="btn atc btn-warning">Add to Cart</a>
-                            <a  class="btn btn-dark">Buy Now</a> 
+                            <a id="buy-now-{{ product.id }}" class="btn btn-dark buy-now-btn" data-product-id="{{ product.id }}">Buy Now</a>
+
                         </div>
                     </div>
                 </div>
@@ -166,18 +163,28 @@
         if (Object.keys(cart).length === 0) {
             cartString = "Your Bag Is Empty. Start Filling It Up!";
         } else {
-            cartString += "<ol style=\"margin: 0; padding: 0; list-style-position: inside;\">";
-
+            cartString += "<ol class='list-unstyled mb-0'>";  // Removed margin and padding from list
             for (var x in cart) {
                 var itemTitle = cart[x][1];
+                var itemId = x;
+                var itemQty = cart[x][0];
                 
-                cartString += "<li>" + itemTitle + " - <em style='color:orange;'> Qty: </em> " + cart[x][0] + "</li>";
+                cartString += `<li class="list-group-item d-flex justify-content-between align-items-center mb-2">
+                    <span class="me-4">${itemTitle}</span> <!-- Add margin-end here -->
+                    <div class="d-flex align-items-center">
+                        <span class="me-3">Qty: ${itemQty}</span> <!-- Margin-end for spacing between quantity and remove button -->
+                        <button class="btn btn-dark btn-sm remove-item" data-item-id="${itemId}">&#x1F5D1;</button>
+                    </div>
+                </li>`;
+
+
             }
             cartString += "</ol>";
+            cartString += "<a href='/checkout' class='btn btn-warning btn-sm mt-2' id='checkout'>Checkout</a> ";
         }
 
         // Adding a checkout button
-        cartString += "<a href='/checkout' class='btn btn-warning btn-sm mt-2' id='checkout'>Checkout</a> ";
+        
 
         // Update popover content
         var cartPopoverElement = document.getElementById("cart");
@@ -192,18 +199,19 @@
         new bootstrap.Popover(cartPopoverElement, {
             html: true,
             sanitize: false,  // Disable HTML sanitization
-            trigger: 'focus'
+            trigger: 'focus',
+            container: 'body'  // Ensure popover appears in the body
         });
     }
+
 
     // Add to cart event listener
     $(document).on('click', '.atc', function(){
         var item_id = this.id.toString();
         if(cart[item_id] != undefined){
-            quantity = cart[item_id][0] + 1
+            quantity = cart[item_id][0] + 1;
             cart[item_id][0] = quantity;
             cart[item_id][2] += parseFloat(document.getElementById("price" + item_id).innerHTML);
-
         } else {
             quantity = 1;
             price = parseFloat(document.getElementById("price" + item_id).innerHTML);
@@ -214,8 +222,35 @@
         updateCart(); // Update cart count and popover content
     });
 
+    // Add Buy Now button event listener
+    $(document).on('click', '.buy-now-btn', function(){
+        var item_id = $(this).data('product-id');
+        if(cart[item_id] != undefined){
+            quantity = cart[item_id][0] + 1;
+            cart[item_id][0] = quantity;
+            cart[item_id][2] += parseFloat(document.getElementById("price" + item_id).innerHTML);
+        } else {
+            quantity = 1;
+            price = parseFloat(document.getElementById("price" + item_id).innerHTML);
+            name = document.getElementById("title" + item_id).innerHTML; 
+            cart[item_id] = [quantity, name, price];
+        }
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCart(); // Update cart count and popover content
+        window.location.href = '/checkout'; // Redirect to the checkout page
+    });
+
+    // Add Remove button event listener
+    $(document).on('click', '.remove-item', function(){
+        var item_id = $(this).data('item-id');
+        delete cart[item_id];
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCart(); // Update cart count and popover content
+    });
+
     // Initial cart update
     updateCart();
+
 </script>
 </html>
 

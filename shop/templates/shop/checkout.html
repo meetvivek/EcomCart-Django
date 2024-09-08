@@ -4,14 +4,12 @@
 {% block body%}
     <!-- Checkout Page Content -->
     <div class="container mt-3">
-        <h3 class="mb-3 title-style">Checkout</h3>
+        <h3 class="mb-4 title-style">Checkout</h3>
 
-
-        
         <!-- Cart Summary -->
         <div class="row mb-4">
             <div class="col-md-6">
-                <h4 class="mb-3">Cart Summary</h4>
+                <h4 class="mb-3 text-secondary">Cart Summary</h4><hr>
                 <ul class="list-group" id="item_list">
                     <!-- Cart items will be dynamically added here -->
                 </ul>
@@ -19,7 +17,7 @@
             
             <!-- Payment Form -->
             <div class="col-md-6">
-                <h4 class="mb-3">Payment Information</h4>
+                <h4 class="mb-3 text-secondary">Payment Information</h4><hr>
                 <form method="POST">
                     {% csrf_token %}
                     <input type="hidden" id="items" name="items">
@@ -95,8 +93,13 @@
                         <span>Qty: ${quantity} | Price: ${price}</span> </li>`;
         $('#item_list').append(itemString);
     }
+    
+    if (Object.keys(cart).length === 0) {
+            total = "<b>Your Bag Is Empty. Start Filling It Up!</b>";
+        } else {
     total = `<li class="list-group-item d-flex justify-content-between align-item-center" style="background-color: transparent; border: none; text-align: right;">
             <b>Your Total: </b> <b>&#8377;${totalPrice}</b></li>`;
+    }
     $('#total').val(totalPrice); 
     $('#item_list').append(total);
     
@@ -105,9 +108,8 @@
 
     // Event listener for the "orderplaced" button
     $('#orderplaced').on('click', function() {
-        localStorage.removeItem('cart'); // Clears the cart from localStorage
-        alert('Order placed Successfully!'); // Optional: Alert user that the cart was cleared
-        location.reload(); // Optional: Reload the page if needed
+        localStorage.removeItem('cart');
+        alert('Order placed Successfully!');
     });
 </script>
 
