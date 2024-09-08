@@ -46,3 +46,6 @@ def checkout(request):
         return redirect('/')
 
     return render(request, "shop/checkout.html")
+
+def about(request):
+    return render(request, "shop/about.html")
