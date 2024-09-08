@@ -135,6 +135,7 @@
     {% endblock %}
 
 </body>
+
 <script type="text/javascript">
 
     if(localStorage.getItem('cart') == null){
@@ -144,76 +145,74 @@
         cart = JSON.parse(localStorage.getItem('cart'));
     }
 
-    // Update cart count and display popover content
-    function updateCart() {
-        // document.getElementById("cart").innerHTML = "Cart (" + Object.keys(cart).length + ")";
-
-        var cartCount = Object.keys(cart).length;
-        document.getElementById("cart-count").textContent = " (" + cartCount + ")";
-        DisplayCart(cart);
-    }
-
-    // Add to cart event listener
-    $(document).on('click', '.atc', function(){
-        var item_id = this.id.toString();
-
-        if(cart[item_id] != undefined){
-            cart[item_id] += 1;
-        }
-        else{
-            cart[item_id] = 1;
-        }
-        localStorage.setItem('cart', JSON.stringify(cart));
-
-        updateCart(); // Update cart and popover content
-    });
-
-
     // Initialize popover using Bootstrap 5 API
     var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
     var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
         
         return new bootstrap.Popover(popoverTriggerEl)
-    })
+    });
 
-    // Display cart content
+    // Update cart content and cart count
+    function updateCart() {
+        var cartCount = Object.keys(cart).length;
+        document.getElementById("cart-count").textContent = " (" + cartCount + ")";
+        DisplayCart(cart);
+    }
+
+    // Function to display cart content inside the popover
     function DisplayCart(cart) {
         var cartString = "";
         if (Object.keys(cart).length === 0) {
             cartString = "Your Bag Is Empty. Start Filling It Up!";
         } else {
-            cartString += "<ol>";
+            cartString += "<ol style=\"margin: 0; padding: 0; list-style-position: inside;\">";
+
             for (var x in cart) {
-                var itemTitle = document.getElementById("title" + x) ? document.getElementById("title" + x).innerHTML : "Unknown Item";
-                cartString += "<li>" + itemTitle + " - <em style='color:red;'>Qty:</em> " + cart[x] + "</li>";
+                var itemTitle = cart[x][1];
+                
+                cartString += "<li>" + itemTitle + " - <em style='color:orange;'> Qty: </em> " + cart[x][0] + "</li>";
             }
             cartString += "</ol>";
         }
 
-        // // Update the popover content
-        // var cartPopoverElement = document.getElementById("cart");
-        // var popoverInstance = bootstrap.Popover.getInstance(cartPopoverElement);
-        // if (popoverInstance) {
-        //     popoverInstance.setContent({ '.popover-body': cartString });
-        //     popoverInstance.update(); // Refresh the popover
-        // } else {
-        //     cartPopoverElement.setAttribute('data-bs-content', cartString);
-        //     new bootstrap.Popover(cartPopoverElement).show();
-        // }
+        // Adding a checkout button
+        cartString += "<a href='/checkout'><button class='btn btn-warning btn-sm mt-2' id='checkout'>Checkout</button></a> ";
 
-        // Update the popover content
+        // Update popover content
         var cartPopoverElement = document.getElementById("cart");
         var popoverInstance = bootstrap.Popover.getInstance(cartPopoverElement);
+        
         if (popoverInstance) {
-            popoverInstance.dispose(); // Remove the existing popover instance
+            popoverInstance.dispose(); // Dispose of the existing popover instance
         }
+
+        // Initialize new popover instance with updated content and sanitize disabled
         cartPopoverElement.setAttribute('data-bs-content', cartString);
-        new bootstrap.Popover(cartPopoverElement); // Create a new popover instance with updated content
+        new bootstrap.Popover(cartPopoverElement, {
+            html: true,
+            sanitize: false,  // Disable HTML sanitization
+            trigger: 'focus'
+        });
     }
 
-    // Initial update
-    updateCart();
+    // Add to cart event listener
+    $(document).on('click', '.atc', function(){
+        var item_id = this.id.toString();
+        if(cart[item_id] != undefined){
+            quantity = cart[item_id][0] + 1
+            cart[item_id][0] = quantity;
 
+        } else {
+            quantity = 1;
+            name = document.getElementById("title" + item_id).innerHTML; 
+            cart[item_id] = [quantity, name];
+        }
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCart(); // Update cart count and popover content
+    });
+
+    // Initial cart update
+    updateCart();
 
 </script>
 </html>
