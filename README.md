@@ -3,6 +3,7 @@
 ## Overview
 
 EcomCart is a simple e-commerce application built with Django. The project aims to provide a basic yet functional online shopping experience while learning Django. Key features include product listing, cart management, and checkout functionality. The application utilizes browser localStorage to maintain the cart state and saves orders as instances of the Order model when users complete their purchases.
+
 ## Features
 
 - **Product Listing**: View products with their titles, images, original and discounted prices.
@@ -13,6 +14,7 @@ EcomCart is a simple e-commerce application built with Django. The project aims 
 - **Pagination**: Navigate through multiple pages of products.
 - **Persistent Cart**: Utilizes browser localStorage to store cart items across page reloads.
 - **Order Management**: When an order is placed, it is saved as an instance of the Order model.
+- **Admin Customization**: Customized the Django admin panel to manage product and order data efficiently.
 
 ## Technologies Used
 
@@ -38,6 +40,7 @@ EcomCart is a simple e-commerce application built with Django. The project aims 
 - **Search Functionality**: Implemented a search feature to filter products by name.
 - **LocalStorage**: Utilized browser localStorage for maintaining cart state.
 - **Order Management**: Implemented backend order management with Django models.
+- **Admin Panel Customization**: Customized the Django admin panel to manage product data more efficiently. Added features like bulk category updates, inline editing of prices, and custom search fields.
 
 ## Contributing
 Contributions are welcome! Please feel free to submit a pull request.
